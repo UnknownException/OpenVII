@@ -1,4 +1,5 @@
 ﻿using FileFormats.FileFormats;
+using FileFormats.Helper;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,7 +67,7 @@ namespace FileFormats.ArchiveFormats
         
             for(int i = 0; i < fileCount; ++i)
             {
-                string filename = Encoding.UTF8.GetString(_binaryReader.ReadBytes(20)).Split('\0')[0];
+                string filename = Encoding.UTF8.GetString(_binaryReader.ReadBytes(20)).Split('\0')[0]; // Some files contain error characters after the first \0
                 uint fileOffset = _binaryReader.ReadUInt32();
                 byte unknown1 = _binaryReader.ReadByte(); // 14
                 byte unknown2 = _binaryReader.ReadByte(); // 0
@@ -80,38 +81,21 @@ namespace FileFormats.ArchiveFormats
 #endif
                 var currentPos = _binaryReader.BaseStream.Position;
                 _binaryReader.BaseStream.Seek(fileOffset, SeekOrigin.Begin);
-                string dataFile = Encoding.UTF8.GetString(_binaryReader.ReadBytes(20));
+                string dataFile = Encoding.UTF8.GetString(_binaryReader.ReadBytes(20)).Split('\0')[0];
                 uint dataSize = _binaryReader.ReadUInt32();
 
 #if DEBUG
                 Console.WriteLine($"-DataFile: {dataFile}");
                 Console.WriteLine($"-DataSize: {dataSize}");
 #endif
-                IFile file = null;
 
-                string fileExtension = Path.GetExtension(filename.Trim('\0')).ToUpper().Substring(1);
-                switch (fileExtension)
-                {
-                    case "TEX":
-                        {
-                            file = new TexFile(this);
-                        }
-                        break;
-                    case "MID":
-                        {
-                            file = new MidiFile(this);
-                        }
-                        break;
-                    default:
-                        {
-                            Console.WriteLine("Failed to get format");
-                            file = new UnknownFile();
-                        }
-                        break;
-                }
+                IFile file = FileFactory.Create(filename, this);
 
 #if DEBUG
-                Console.WriteLine($"-Extension: {fileExtension}");
+                if (file.GetType() == typeof(UnknownFile))
+                {
+                    Console.WriteLine("Failed to get format");
+                }
 #endif
 
                 file.Name = filename.TrimEnd('\0');
