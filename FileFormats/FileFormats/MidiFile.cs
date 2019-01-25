@@ -6,20 +6,20 @@ namespace FileFormats.FileFormats
 {
     public class MidiFile : BaseFile
     {
-        private WeakReference<DataBuffer> _cache;
+        private WeakReference<byte[]> _cache;
         public MidiFile(IArchive fileContainer) : base(fileContainer)
         {
-            _cache = new WeakReference<DataBuffer>(null);
+            _cache = new WeakReference<byte[]>(null);
         }
 
-        public DataBuffer GetBuffer()
+        public byte[] GetBuffer()
         {
-            if (_cache.TryGetTarget(out DataBuffer target) && target != null)
+            if (_cache.TryGetTarget(out byte[] target) && target != null)
             {
                 return target;
             }
 
-            var buffer = new DataBuffer(_fileContainer.Read(DataOffset, (int)DataSize));
+            var buffer = _fileContainer.Read(DataOffset, (int)DataSize);
             _cache.SetTarget(buffer);
 
             return buffer;

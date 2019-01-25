@@ -9,7 +9,5 @@ namespace FileFormats.FileFormats
         string DataName { get; set; }
         long DataOffset { get; set; }
         uint DataSize { get; set; }
-
-//        DataBuffer GetDataBuffer();
     }
 }

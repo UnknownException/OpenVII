@@ -15,26 +15,5 @@ namespace FileFormats.FileFormats
         {
             _fileContainer = fileContainer;
         }
-
-        /*
-        protected virtual DataBuffer Read()
-        {
-            throw new NotImplementedException();
-        }
-
-        private WeakReference<DataBuffer> _cache;
-        public DataBuffer GetDataBuffer()
-        {
-            if(_cache.TryGetTarget(out DataBuffer target))
-            {
-                return target;
-            }
-
-            var buffer = Read();
-            _cache.SetTarget(buffer);
-
-            return buffer;
-        }
-        */
     }
 }
