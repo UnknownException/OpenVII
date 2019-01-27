@@ -9,7 +9,7 @@ namespace Shared.Engine
         void Run();
         void Register(IBaseModuleManager baseManager);
 
-        ITexture CreateTexture(TextureFormat textureFormat, DataBuffer textureBuffer);
+        IImage CreateImage(TextureFormat textureFormat, DataBuffer textureBuffer);
         void Draw(IDrawable drawable);
     }
 }

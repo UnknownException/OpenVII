@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
-using EngineModule.Drawable;
+using Engine.Drawable;
 using Shared;
 using Shared.Engine;
 using Shared.Engine.Drawable;
 using Shared.Modules;
 
-namespace EngineModule
+namespace Engine
 {
-    public class EngineManager : IEngineManager
+    public class EngineManager : IEngineManager, IDisposable
     {
         private delegate void OnUpdateDelegate(long deltaTime);
         private OnUpdateDelegate _onUpdateDelegate;
@@ -21,6 +21,11 @@ namespace EngineModule
         public EngineManager()
         {
 
+        }
+
+        public void Dispose()
+        {
+            _window?.Dispose();
         }
 
         public bool CreateWindow(int width, int height, string title)
@@ -58,6 +63,10 @@ namespace EngineModule
 
                     previousRenderTime = currentRenderTime - (difference - 16);
                 }
+                else
+                {
+                    System.Threading.Thread.Sleep(1);
+                }
             }
 
             stopwatch.Stop();
@@ -72,7 +81,7 @@ namespace EngineModule
             _onDrawDelegate += baseManager.OnDraw;
         }
 
-        public ITexture CreateTexture(TextureFormat textureFormat, DataBuffer textureBuffer)
+        public IImage CreateImage(TextureFormat textureFormat, DataBuffer textureBuffer)
         {
             if (_window == null)
             {
@@ -80,7 +89,7 @@ namespace EngineModule
             }
 
 
-            return new Texture(_window.GraphicsDevice, textureFormat, textureBuffer);
+            return new Image(_window.GraphicsDevice, textureFormat, textureBuffer);
         }
 
         public void Draw(IDrawable drawable)

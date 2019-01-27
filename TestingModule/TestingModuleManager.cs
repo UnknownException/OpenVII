@@ -17,18 +17,15 @@ namespace TestingModule
     {
         private readonly IEngineManager _engineManager;
 
-        // TEST DATA
-        private ITexture _texture = null;
+        private IImage _image = null;
 
         public TestingModuleManager(IEngineManager engineManager)
         {
             _engineManager = engineManager;
 
-            // TEST DATA
             Console.WriteLine(Directory.GetCurrentDirectory());
             using (var archive = new LGPArchive())
             {
-                //if (!archive.Open("../../../../Data/midi/midi.lgp"))//midi, awe, xg, ygm
                 if (!archive.Open("../../../../Data/menu/menu_us.lgp"))
                 {
                     Console.WriteLine("Failed to open menu_us");
@@ -47,34 +44,10 @@ namespace TestingModule
                         if (file.GetType() == typeof(TexFile))
                         {
                             Console.WriteLine("Instance of texfile");
-                            var _image = (TexFile)file;
-                            //                            _image.Parse();
-
-                            _texture = _engineManager.CreateTexture(_image.GetTextureFormat(), _image.GetTextureBuffer());
+                            var _texFile = (TexFile)file;
+                            _image = _engineManager.CreateImage(_texFile.GetTextureFormat(), _texFile.GetTextureBuffer());
                         }
                     }
-                    /*
-                    var file = archive.Find("aseri2.mid");
-                    if (file == null)
-                    {
-                        Console.WriteLine("Failed to find bat.mid");
-                    }
-                    else
-                    {
-                        if (file.GetType() == typeof(MidiFile))
-                        {
-                            Console.WriteLine("Instance of midifile");
-                            var midi = (MidiFile)file;
-                            var buffer = midi.GetBuffer();
-                            using (var fs = new FileStream("../../../../Extract/aseri2_midi.mid", FileMode.CreateNew))
-                            {
-                                var bytes = new byte[buffer.GetSize()];
-                                Marshal.Copy(buffer.GetIntPtr(), bytes, 0, (int)buffer.GetSize());
-                                fs.Write(bytes);
-                            }
-                        }
-                    }
-                    */
                 }
             }
 
@@ -82,7 +55,7 @@ namespace TestingModule
 
         public void Register()
         {
-            _engineManager.Register(this); ;
+            _engineManager.Register(this);
         }
 
         public void OnUpdate(long deltaTime)
@@ -92,9 +65,9 @@ namespace TestingModule
 
         public void OnDraw()
         {
-            if (_texture != null)
+            if (_image != null)
             {
-                _engineManager.Draw(_texture);
+                _engineManager.Draw(_image);
             }
         }
     }

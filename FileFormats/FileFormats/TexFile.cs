@@ -127,30 +127,6 @@ namespace FileFormats.FileFormats
             public int Unknown_09 { get; set; }
         }
 
-        /*
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct TextureFormat
-        {
-            public int Width { get; set; }
-            public int Height { get; set; }
-            public int Pitch { get; set; }
-            public int Unknown { get; set; }
-            public int PaletteFlag { get; set; }
-            public int BitsPerPaletteIndex { get; set; }
-            public int PaletteIndex8Bit { get; set; }
-            public int PaletteSize { get; set; }
-            public int PaletteColorCount { get; set; }
-            public int RuntimeDataPtrPaletteData { get; set; }
-            public PixelFormat PixelFormat { get; set; }
-        }
-        */
-
-        public enum PaletteType {
-            A8R8G8B8 = 0x00,
-            FLOAT32_ARGB = 0x01,
-            B8G8R8A8 = 0x02
-        }
-
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct RGBA
         {
@@ -196,7 +172,7 @@ namespace FileFormats.FileFormats
             // Read palettes
             int rgbaSize = Marshal.SizeOf(new RGBA());
             int paletteDataSize = totalColorCount * rgbaSize;
-            var content = _fileContainer.Read(DataOffset + fileOffset, paletteDataSize);
+            var content = _fileContainer.Read(fileOffset, paletteDataSize);
             fileOffset += paletteDataSize;
 
             for(int i = 0; i < totalColorCount; ++i)
@@ -207,8 +183,14 @@ namespace FileFormats.FileFormats
 
             // Read image indexes (references to palette)
             int imageSize = _header.ImageData.Width * _header.ImageData.Height;
-            var indexData = _fileContainer.Read(DataOffset + fileOffset, imageSize);
+            var indexData = _fileContainer.Read(fileOffset, imageSize);
             fileOffset += imageSize;
+
+            if(fileOffset - DataOffset != DataSize)
+            {
+                throw new FileLoadException("Data read and data size do not match");
+            }
+
             for (int i = 0; i < indexData.Length; ++i)
             {
                 var index = indexData[i];
@@ -238,13 +220,13 @@ namespace FileFormats.FileFormats
             }
 
             int rgbaSize = Marshal.SizeOf(new RGBA());
-            var buffer = new byte[_imageData.Count * rgbaSize];
+            var buffer = new byte[(_imageData.Count * rgbaSize)];
             //TODO Optimize
             for(int i = 0; i < _imageData.Count; ++i)
-            {
-                buffer[i*4] = _imageData[i].Blue;
+            {  
+                buffer[i * 4] = _imageData[i].Red;
                 buffer[i*4+1] = _imageData[i].Green;
-                buffer[i*4+2] = _imageData[i].Red;
+                buffer[i*4+2] = _imageData[i].Blue;
                 buffer[i*4+3] = _imageData[i].Alpha;
             }
 
