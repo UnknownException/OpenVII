@@ -220,7 +220,7 @@ namespace FileFormats.FileFormats
             }
 
             int rgbaSize = Marshal.SizeOf(new RGBA());
-            var buffer = new byte[(_imageData.Count * rgbaSize)];
+            var buffer = new byte[_imageData.Count * rgbaSize];
             //TODO Optimize
             for(int i = 0; i < _imageData.Count; ++i)
             {  
