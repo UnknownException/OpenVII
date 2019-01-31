@@ -1,4 +1,5 @@
-﻿using FileFormats.ArchiveFormats;
+﻿using Audio;
+using FileFormats.ArchiveFormats;
 using FileFormats.FileFormats;
 using Shared.Engine;
 using Shared.Engine.Drawable;
@@ -34,10 +35,10 @@ namespace TestingModule
                 {
                     Console.WriteLine("Opened lgp");
 
-                    var file = archive.Find("barre.tex");
+                    var file = archive.Find("pcloud.tex");
                     if (file == null)
                     {
-                        Console.WriteLine("Failed to find barre.tex");
+                        Console.WriteLine("Failed to find pcloud.text");
                     }
                     else
                     {
@@ -50,7 +51,32 @@ namespace TestingModule
                     }
                 }
             }
-
+            using (var archive = new LGPArchive())
+            {
+                if (!archive.Open("../../../../Data/midi/ygm.lgp"))
+                {
+                    Console.WriteLine("Failed to open ygm midi lgp");
+                }
+                else
+                {
+                    var file = archive.Find("lb2.mid");
+                    if (file == null)
+                    {
+                        Console.WriteLine("Failed to find chu.mid");
+                    }
+                    else
+                    {
+                        if (file.GetType() == typeof(MidiFile))
+                        {
+                            Console.WriteLine("Instance of midi");
+                            var _midiFile = (MidiFile)file;
+                            var audioMgr = new AudioManager();
+                            audioMgr.SetSoundFont("MuseScore_General.sf2");
+                            audioMgr.PlayMidi(_midiFile.GetBuffer());
+                        }
+                    }
+                }
+            }
         }
 
         public void Register()
