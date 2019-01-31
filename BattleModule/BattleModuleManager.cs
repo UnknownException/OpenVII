@@ -13,6 +13,11 @@ namespace BattleModule
             _engineManager = engineManager;            
         }
 
+        public void OnDestroy()
+        {
+            throw new NotImplementedException();
+        }
+
         public void OnDraw()
         {
             throw new NotImplementedException();

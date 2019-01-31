@@ -19,6 +19,7 @@ namespace TestingModule
         private readonly IEngineManager _engineManager;
 
         private IImage _image = null;
+        private AudioManager _audioMgr = null;
 
         public TestingModuleManager(IEngineManager engineManager)
         {
@@ -70,9 +71,9 @@ namespace TestingModule
                         {
                             Console.WriteLine("Instance of midi");
                             var _midiFile = (MidiFile)file;
-                            var audioMgr = new AudioManager();
-                            audioMgr.SetSoundFont("MuseScore_General.sf2");
-                            audioMgr.PlayMidi(_midiFile.GetBuffer());
+                            _audioMgr = new AudioManager();
+                            _audioMgr.SetSoundFont("MuseScore_General.sf2");
+                            _audioMgr.PlayMidi(_midiFile.GetBuffer());
                         }
                     }
                 }
@@ -95,6 +96,12 @@ namespace TestingModule
             {
                 _engineManager.Draw(_image);
             }
+        }
+
+        public void OnDestroy()
+        {
+            _image?.Dispose();
+            _audioMgr?.Dispose();
         }
     }
 }
