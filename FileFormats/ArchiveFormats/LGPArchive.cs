@@ -58,12 +58,6 @@ namespace FileFormats.ArchiveFormats
 //            short unknown = _binaryReader.ReadInt16();
             string magicString = Encoding.UTF8.GetString(_binaryReader.ReadBytes(12));  // 0x00 0x00 STRING
             uint fileCount = _binaryReader.ReadUInt32();
-
-#if DEBUG
-//            Console.WriteLine($"Unknown: {unknown}");
-            Console.WriteLine($"Magic string: {magicString}");
-            Console.WriteLine($"File count: {fileCount}");
-#endif
         
             for(int i = 0; i < fileCount; ++i)
             {
@@ -74,27 +68,18 @@ namespace FileFormats.ArchiveFormats
                 byte unknown3 = _binaryReader.ReadByte(); // 0
 #if DEBUG
                 Console.WriteLine($"-Name: {filename}");
-                Console.WriteLine($"-Offset: {fileOffset}");
-                Console.WriteLine($"-Unknown1: {unknown1}");
-                Console.WriteLine($"-Unknown2: {unknown2}");
-                Console.WriteLine($"-Unknown3: {unknown3}");
 #endif
                 var currentPos = _binaryReader.BaseStream.Position;
                 _binaryReader.BaseStream.Seek(fileOffset, SeekOrigin.Begin);
                 string dataFile = Encoding.UTF8.GetString(_binaryReader.ReadBytes(20)).Split('\0')[0];
                 uint dataSize = _binaryReader.ReadUInt32();
 
-#if DEBUG
-                Console.WriteLine($"-DataFile: {dataFile}");
-                Console.WriteLine($"-DataSize: {dataSize}");
-#endif
-
                 IFile file = FileFactory.Create(filename, this);
 
 #if DEBUG
                 if (file.GetType() == typeof(UnknownFile))
                 {
-                    Console.WriteLine("Failed to get format");
+         //           Console.WriteLine("Failed to get format");
                 }
 #endif
 
@@ -105,10 +90,6 @@ namespace FileFormats.ArchiveFormats
                 file.DataOffset = _binaryReader.BaseStream.Position;
 
                 FileList.Add(file);
-
-#if DEBUG
-                Console.WriteLine();
-#endif
 
                 _binaryReader.BaseStream.Seek(currentPos, SeekOrigin.Begin);
             }

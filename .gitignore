@@ -347,3 +347,5 @@ ASALocalRun/
 *.lmd
 *.tex
 *.sf2
+*.hrc
+*.rsd
