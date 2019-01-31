@@ -617,7 +617,6 @@ link_directories (
 # Process subdirectories
 add_subdirectory ( src )
 add_subdirectory ( test )
-add_subdirectory ( doc )
 
 # pkg-config support
 set ( prefix "${CMAKE_INSTALL_PREFIX}" )
@@ -663,7 +662,6 @@ if ( UNIX )
         COMMAND mkdir -p ${PACKAGE}-${VERSION}
         COMMAND cp -r bindings ${PACKAGE}-${VERSION}
         COMMAND cp -r cmake_admin ${PACKAGE}-${VERSION}
-        COMMAND cp -r doc ${PACKAGE}-${VERSION}
         COMMAND cp -r include ${PACKAGE}-${VERSION}
         COMMAND cp -r src ${PACKAGE}-${VERSION}
         COMMAND cp AUTHORS ChangeLog CMakeLists.txt LICENSE ${PACKAGE}.* INSTALL NEWS README* THANKS TODO ${PACKAGE}-${VERSION}
