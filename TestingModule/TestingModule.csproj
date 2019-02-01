@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Audio\Audio.csproj" />
     <ProjectReference Include="..\FileFormats\FileFormats.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>

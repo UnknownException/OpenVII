@@ -5,5 +5,6 @@
         void Register();
         void OnUpdate(long deltaTime);
         void OnDraw();
+        void OnDestroy();
     }
 }

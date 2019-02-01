@@ -12,6 +12,11 @@ namespace MiniGameModule
             _engineManager = engineManager;
         }
 
+        public void OnDestroy()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void OnDraw()
         {
             throw new System.NotImplementedException();

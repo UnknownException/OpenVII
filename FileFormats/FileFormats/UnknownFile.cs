@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Shared;
+﻿using FileFormats.ArchiveFormats;
+using System;
 
 namespace FileFormats.FileFormats
 {
-    public class UnknownFile : IFile
+    public class UnknownFile : BaseFile
     {
-        public string Name { get; set; }
-        public uint Offset { get; set; }
-        public string DataName { get; set; }
-        public long DataOffset { get; set; }
-        public uint DataSize { get; set; }
+        public UnknownFile(IArchive fileContainer) : base(fileContainer)
+        {
+        }
+
+        public byte[] GetBuffer()
+        {
+            return _fileContainer.Read(DataOffset, (int)DataSize);
+        }
     }
 }

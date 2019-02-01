@@ -16,15 +16,19 @@ namespace Engine
         private delegate void OnDrawDelegate();
         private OnDrawDelegate _onDrawDelegate;
 
+        private delegate void OnDestroyDelegate();
+        private OnDestroyDelegate _onDestroyDelegate;
+
         private Window _window;
 
         public EngineManager()
         {
-
         }
 
         public void Dispose()
         {
+            _onDestroyDelegate();
+
             _window?.Dispose();
         }
 
@@ -79,6 +83,7 @@ namespace Engine
         {
             _onUpdateDelegate += baseManager.OnUpdate;
             _onDrawDelegate += baseManager.OnDraw;
+            _onDestroyDelegate += baseManager.OnDestroy;
         }
 
         public IImage CreateImage(TextureFormat textureFormat, DataBuffer textureBuffer)

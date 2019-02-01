@@ -1,4 +1,5 @@
-﻿using FileFormats.ArchiveFormats;
+﻿using Audio;
+using FileFormats.ArchiveFormats;
 using FileFormats.FileFormats;
 using Shared.Engine;
 using Shared.Engine.Drawable;
@@ -18,6 +19,7 @@ namespace TestingModule
         private readonly IEngineManager _engineManager;
 
         private IImage _image = null;
+        private AudioManager _audioMgr = null;
 
         public TestingModuleManager(IEngineManager engineManager)
         {
@@ -34,10 +36,10 @@ namespace TestingModule
                 {
                     Console.WriteLine("Opened lgp");
 
-                    var file = archive.Find("barre.tex");
+                    var file = archive.Find("pcloud.tex");
                     if (file == null)
                     {
-                        Console.WriteLine("Failed to find barre.tex");
+                        Console.WriteLine("Failed to find pcloud.text");
                     }
                     else
                     {
@@ -50,7 +52,32 @@ namespace TestingModule
                     }
                 }
             }
-
+            using (var archive = new LGPArchive())
+            {
+                if (!archive.Open("../../../../Data/midi/ygm.lgp"))
+                {
+                    Console.WriteLine("Failed to open ygm midi lgp");
+                }
+                else
+                {
+                    var file = archive.Find("lb2.mid");
+                    if (file == null)
+                    {
+                        Console.WriteLine("Failed to find chu.mid");
+                    }
+                    else
+                    {
+                        if (file.GetType() == typeof(MidiFile))
+                        {
+                            Console.WriteLine("Instance of midi");
+                            var _midiFile = (MidiFile)file;
+                            _audioMgr = new AudioManager();
+                            _audioMgr.SetSoundFont("MuseScore_General.sf2");
+                            _audioMgr.PlayMidi(_midiFile.GetBuffer());
+                        }
+                    }
+                }
+            }
         }
 
         public void Register()
@@ -69,6 +96,12 @@ namespace TestingModule
             {
                 _engineManager.Draw(_image);
             }
+        }
+
+        public void OnDestroy()
+        {
+            _image?.Dispose();
+            _audioMgr?.Dispose();
         }
     }
 }

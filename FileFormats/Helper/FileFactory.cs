@@ -11,7 +11,7 @@ namespace FileFormats.Helper
         {
             if(!filename.Contains('.'))
             {
-                return new UnknownFile();
+                return new UnknownFile(archive);
             }
 
             string fileExtension = Path.GetExtension(filename.Trim('\0')).ToUpper().Substring(1);
@@ -27,7 +27,7 @@ namespace FileFormats.Helper
                     }
                 default:
                     {
-                        return new UnknownFile();
+                        return new UnknownFile(archive);
                     }
             }
         }

@@ -16,6 +16,11 @@ namespace FieldModule
             _battleModule = battleModule;
         }
 
+        public void OnDestroy()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void OnDraw()
         {
             throw new System.NotImplementedException();
